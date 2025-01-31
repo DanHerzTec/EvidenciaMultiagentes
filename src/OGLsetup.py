@@ -16,11 +16,14 @@ from src.constants import (
     TEXTURE_FILES
 )
 from src.textures.textures import init_textures, textures
+from src.objects.objectManager import ObjectManager
 
 # Variables de cámara que modificaremos (inicializadas con los valores de constants)
 eye_x = EYE_X
 eye_y = EYE_Y
 eye_z = EYE_Z
+
+object_manager = ObjectManager()
 
 def Axis():
     glShadeModel(GL_FLAT)
@@ -69,8 +72,12 @@ def Init():
     # Habilitar texturas 2D
     glEnable(GL_TEXTURE_2D)
 
+    object_manager.load_object("house", "src/objects/house.obj", scale=5.0, position=(0, 0, 0), rotation=(-90, 0, 0))
+    
     # Inicializar texturas (p.ej. “textura1.bmp”, etc.)
     init_textures(TEXTURE_FILES)
+    
+    
 
 def PlanoTexturizado():
     """
@@ -117,11 +124,17 @@ def draw_sky():
 
 def display():
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+    glEnable(GL_TEXTURE_2D)
+    
     # Ejes de referencia
     draw_sky()
     Axis()
     # Dibuja el plano con textura
     PlanoTexturizado()
+    
+    object_manager.render_objects()
+    
+    
     
 
 def run():
